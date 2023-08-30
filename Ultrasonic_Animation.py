@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 from scipy import interpolate
 import numpy as np
 import serial
+import re
 
 plt.ion()
 
@@ -22,11 +23,12 @@ while True:
 
     received_data = serial_port1.readline()
     sensor_data = received_data.decode()
-    sensor_data = sensor_data.strip("Distance: cm\n")
-    sensor_data = int(sensor_data)
+    numbers  = re.findall('\d+', sensor_data)
+    sensor_data = [int(num) for num in numbers]
+    print(sensor_data)
 
-    x = [sensor_data, 0, -1 * sensor_data, 0]
-    y = [0, sensor_data, 0, -1 * sensor_data]
+    x = [sensor_data[0], 0, -1 * sensor_data[2],0]
+    y = [0, sensor_data[1], 0, -1 * sensor_data[0]]
     x_data=x
     y_data=y
 
